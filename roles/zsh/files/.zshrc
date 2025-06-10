@@ -55,7 +55,8 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export FLYCTL_INSTALL="$HOME/.fly"
 export PATH="$FLYCTL_INSTALL/bin:$PATH"
-# eval "$(zellij setup --generate-auto-start zsh)"
+# Auto-start zellij only in interactive shells, not if already inside zellij, tmux, VS Code, or Cursor
+alias zj="zellij"
 
 alias ct='bat --paging=never'
 alias dotfiles="$HOME/.dotfiles/bin/dotfiles"
@@ -84,3 +85,9 @@ alias c="cursor"
 
 #fzf
 source <(fzf --zsh)
+
+# Starship prompt initialization
+if command -v starship >/dev/null 2>&1; then
+  export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+  eval "$(starship init zsh)"
+fi
