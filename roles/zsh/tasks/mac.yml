@@ -51,6 +51,11 @@
     dest: "{{ ansible_user_dir }}/.zshrc"
     mode: "0644"
 
+- name: "Zsh | Copy .zsh_aliases"
+  ansible.builtin.copy:
+    src: ".zsh_aliases"
+    dest: "{{ ansible_user_dir }}/.zsh_aliases"
+    mode: "0644"
 
 # - name: "zsh | Copy Private Files openai.apikey"
 #   ansible.builtin.lineinfile:
@@ -73,3 +78,21 @@
     src: "gprune.sh"
     dest: "{{ ansible_user_dir }}/.local/bin/gprune"
     mode: "0755"
+
+- name: Install starship prompt
+  homebrew:
+    name: starship
+    state: present
+
+- name: Ensure starship config directory exists
+  file:
+    path: "{{ ansible_user_dir }}/.config"
+    state: directory
+    mode: '0755'
+
+- name: Copy default starship.toml
+  copy:
+    src: starship.toml
+    dest: "{{ ansible_user_dir }}/.config/starship.toml"
+    mode: '0644'
+    force: no

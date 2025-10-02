@@ -84,3 +84,22 @@
     src: "gprune.sh"
     dest: "{{ ansible_user_dir }}/.local/bin/gprune"
     mode: "0755"
+
+- name: Install starship prompt
+  ansible.builtin.apt:
+    name: starship
+    state: present
+  become: true
+
+- name: Ensure starship config directory exists
+  file:
+    path: "{{ ansible_user_dir }}/.config"
+    state: directory
+    mode: '0755'
+
+- name: Copy default starship.toml
+  copy:
+    src: starship.toml
+    dest: "{{ ansible_user_dir }}/.config/starship.toml"
+    mode: '0644'
+    force: no

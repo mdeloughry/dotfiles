@@ -10,8 +10,7 @@ plugins=(git 1password aliases aws zsh-autosuggestions zsh-syntax-highlighting c
 
 source $ZSH/oh-my-zsh.sh
 
-alias sail=vendor/bin/sail
-alias cw=cargo watch -q -c -x run -w
+
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 
 export NVM_DIR="$HOME/.nvm"
@@ -55,12 +54,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export FLYCTL_INSTALL="$HOME/.fly"
 export PATH="$FLYCTL_INSTALL/bin:$PATH"
-# eval "$(zellij setup --generate-auto-start zsh)"
 
-alias ct='bat --paging=never'
-alias dotfiles="$HOME/.dotfiles/bin/dotfiles"
-alias gbc="better-commits"
-alias ng="ngrok http --domain=complete-marten-moved.ngrok-free.app "
 
 eval "$(atuin init zsh)"
 eval "$(op completion zsh)"
@@ -73,15 +67,15 @@ export PATH="/opt/homebrew/opt/ansible@8/bin:$PATH"
 
 export ARTISAN_OPEN_ON_MAKE_EDITOR=code
 
-#sail AlIASES
-alias smig="sail artisan migrate"
-alias sseed="sail artisan db:seed"
-alias sart="sail artisan"
-alias ar="artisan"
 
 #fzf
 source <(fzf --zsh)
 
-if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
-    export TERM=xterm-256color
+# Starship prompt initialization
+if command -v starship >/dev/null 2>&1; then
+  export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+  eval "$(starship init zsh)"
 fi
+
+
+source $HOME/.zsh_aliases

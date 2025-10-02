@@ -1,0 +1,5 @@
+---
+- name: "Tailscale | Install Tailscale via Homebrew"
+  ansible.builtin.homebrew:
+    name: tailscale
+    state: present
