@@ -1,0 +1,51 @@
+# Auto-start zellij only in interactive shells, not if already inside zellij, tmux, VS Code, or Cursor
+alias zj="zellij"
+
+alias ct='bat --paging=never'
+alias dotfiles="$HOME/.dotfiles/bin/dotfiles"
+alias gbc="better-commits"
+alias ng="ngrok http --domain=complete-marten-moved.ngrok-free.app 3000"
+
+#sail AlIASES
+alias sail=vendor/bin/sail
+alias cw=cargo watch -q -c -x run -w
+alias smig="sail artisan migrate"
+alias sseed="sail artisan db:seed"
+alias sa="sail artisan"
+alias ar="artisan"
+alias stink="sail artisan tinker"
+alias tinker="artisan tinker"
+alias sci="composer install"
+alias ci='composer install'
+alias scu="composer update"
+alias cu='composer update'
+alias scd="composer dump-autoload"
+alias dump='composer dump-autoload'
+alias dumpo='composer dump-autoload -o'
+
+#cursor Aliases
+alias c="cursor"
+
+
+#git Aliases
+alias g='git'
+alias gs='git status'
+alias gcane='git commit --amend --no-edit'
+alias gc="git checkout"
+
+alias ggl="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%an%C(reset)%C(bold yellow)%d%C(reset) %C(dim white)- %s%C(reset)' --all"
+
+alias gcb="git checkout -b"
+alias gp="git push"
+alias gpf="git push --force-with-lease"
+
+#tailscale Aliases
+alias ts="tailscale"
+alias tss="tailscale status"
+alias tsg="tailscale gateway"
+alias tsh="tailscale help"
+alias tsl="tailscale login"
+alias tso="tailscale logout"
+alias tsr="tailscale routes"
+alias tss="tailscale status"
+

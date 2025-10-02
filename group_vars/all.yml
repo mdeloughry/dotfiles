@@ -44,6 +44,7 @@ default_roles:
   - netlify
   - railway
   - raycast
+  - tailscale
 
 git_user_name: "Matt Deloughry"
 git_user_email: !vault |
