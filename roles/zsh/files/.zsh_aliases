@@ -51,3 +51,6 @@ alias tss="tailscale status"
 
 # lazyssh
 alias lssh="lazyssh"
+
+# lazydocker
+alias ld="lazydocker"

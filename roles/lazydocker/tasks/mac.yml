@@ -1,0 +1,7 @@
+---
+- name: "LazyDocker | install"
+  ansible.builtin.homebrew:
+    name: jesseduffield/lazydocker/lazydocker
+    state: latest
+  ignore_errors: True
+  when: "ansible_system == 'Darwin'"

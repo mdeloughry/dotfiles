@@ -28,6 +28,7 @@ default_roles:
   - rust
   - ssh
   - lazyssh
+  - lazydocker
   # - sshfs
   # - tmate
   # - tmux
