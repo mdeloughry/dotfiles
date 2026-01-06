@@ -1,0 +1,8 @@
+---
+- name: "LazySSH | install"
+  ansible.builtin.homebrew:
+    name: Adembc/homebrew-tap/lazyssh
+    state: latest
+  ignore_errors: True
+  when: "ansible_system == 'Darwin'"
+

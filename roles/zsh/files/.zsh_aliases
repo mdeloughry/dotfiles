@@ -48,3 +48,6 @@ alias tsl="tailscale login"
 alias tso="tailscale logout"
 alias tsr="tailscale routes"
 alias tss="tailscale status"
+
+# lazyssh
+alias lssh="lazyssh"
