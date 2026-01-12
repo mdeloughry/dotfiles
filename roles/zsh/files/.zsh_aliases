@@ -54,3 +54,10 @@ alias lssh="lazyssh"
 
 # lazydocker
 alias ld="lazydocker"
+
+# lazygit
+alias lg="lazygit"
+
+dckstop() { docker ps -a -q | xargs -r docker stop; }
+# List all Docker containers with their ID, Name, Status, and sort by running and then last run time
+alias dckps='docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.CreatedAt}}" | (head -n 1 && tail -n +2 | sort -k3,3 -k4,4r)'
