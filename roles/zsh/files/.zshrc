@@ -6,22 +6,40 @@ zstyle ':omz:update' mode auto # update automatically without asking
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-plugins=(git 1password aliases aws zsh-autosuggestions zsh-syntax-highlighting cd-ls artisan laravel-sail)
+plugins=(git 1password aliases aws zsh-autosuggestions zsh-syntax-highlighting zsh-completions cd-ls artisan laravel-sail)
 
 source $ZSH/oh-my-zsh.sh
 
 
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 
+# NVM lazy-loading for faster shell startup
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-# place this after nvm initialization!
+
+# Lazy-load NVM - only loads when nvm/node/npm/npx/yarn is called
+_nvm_lazy_load() {
+  unset -f nvm node npm npx yarn 2>/dev/null
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
+
+nvm() { _nvm_lazy_load; nvm "$@"; }
+node() { _nvm_lazy_load; node "$@"; }
+npm() { _nvm_lazy_load; npm "$@"; }
+npx() { _nvm_lazy_load; npx "$@"; }
+yarn() { _nvm_lazy_load; yarn "$@"; }
+
+# Auto-switch node version when entering directories with .nvmrc
 autoload -U add-zsh-hook
 
 load-nvmrc() {
+  # Ensure NVM is loaded first
+  if ! type nvm_find_nvmrc &>/dev/null; then
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  fi
+
   local nvmrc_path
-  nvmrc_path="$(nvm_find_nvmrc)"
+  nvmrc_path="$(nvm_find_nvmrc 2>/dev/null)"
 
   if [ -n "$nvmrc_path" ]; then
     local nvmrc_node_version
@@ -32,14 +50,13 @@ load-nvmrc() {
     elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
       nvm use
     fi
-  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc 2>/dev/null)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
     echo "Reverting to nvm default version"
     nvm use default
   fi
 }
 
 add-zsh-hook chpwd load-nvmrc
-load-nvmrc
 
 export PATH="$PATH:$HOME/.local/bin"
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)

@@ -1,22 +1,28 @@
 ---
 - name: "NVM | Install Node Version Manager (NVM)"
   ansible.builtin.shell:
-    cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash"
+    cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
   args:
     creates: "{{ ansible_user_dir }}/.nvm"
+  register: nvm_install
+  retries: 3
+  delay: 5
+  until: nvm_install.rc == 0
 
 - name: "NPM | Install Latest LTS NodeJS version"
   ansible.builtin.shell:
     cmd: |
       export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
       nvm install --lts --latest-npm
+  register: node_install
+  retries: 3
+  delay: 5
+  until: node_install.rc == 0
 
 - name: "NPM | Set Default LTS NodeJS version"
   ansible.builtin.shell:
     cmd: |
       export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
       nvm alias default lts/*

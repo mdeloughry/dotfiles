@@ -1,33 +1,41 @@
 ---
-- name: Check if path exists
+- name: "Atuin | Check if path exists"
   ansible.builtin.stat:
     path: "/usr/bin/atuin"
   register: atuin_path_check
 
-- name: Download Atuin
+- name: "Atuin | Download install script"
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh
-    dest: /tmp/install.sh
-    
-- name: Changing perm of "/tmp/install.sh", adding "u+x"
-  file: dest=/tmp/install.sh mode=u+x
+    dest: /tmp/atuin_install.sh
+    mode: "0755"
+  register: atuin_download
+  retries: 3
+  delay: 5
+  until: atuin_download is succeeded
 
-- name: Install Atuin using install.sh script
+- name: "Atuin | Install using install.sh script"
   ansible.builtin.shell:
-    cmd: '/tmp/install.sh'
+    cmd: '/tmp/atuin_install.sh'
   when: not atuin_path_check.stat.exists
+  register: atuin_install
+  retries: 3
+  delay: 5
+  until: atuin_install.rc == 0 or atuin_install is skipped
 
-- name: Atuin Remove the install.sh
-  file:
-    path: /tmp/install.sh
+- name: "Atuin | Remove install script"
+  ansible.builtin.file:
+    path: /tmp/atuin_install.sh
     state: absent
 
-- name: Atuin | Copy Config
+- name: "Atuin | Create config directory"
   ansible.builtin.file:
-    path: "/{{ ansible_user_dir }}/.config/atuin"
+    path: "{{ ansible_user_dir }}/.config/atuin"
     state: directory
+    mode: "0755"
 
-- name: Copy Atuin config
+- name: "Atuin | Copy config"
   ansible.builtin.copy:
     src: config.toml
-    dest: "/{{ ansible_user_dir }}/.config/atuin/config.toml"
+    dest: "{{ ansible_user_dir }}/.config/atuin/config.toml"
+    mode: "0644"

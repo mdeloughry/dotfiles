@@ -40,6 +40,11 @@
     repo: https://github.com/zshzoo/cd-ls
     dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/cd-ls"
 
+- name: Zsh | Clone zsh-completions repo
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-completions
+    dest: "{{ ansible_user_dir }}/.oh-my-zsh/custom/plugins/zsh-completions"
+
 # - name: "Zsh | Set Zsh as default shell on Ubuntu"
 #   ansible.builtin.command:
 #     cmd: "chsh -s /bin/zsh {{ host_user }}"
