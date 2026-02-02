@@ -1,45 +1,48 @@
-require('techdufus')
-
--- Automatically install lazy.nvim
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Set leader key before loading plugins
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--- Install your plugins here
+-- Load core configuration
+require('core')
+
+-- Install plugins
 require('lazy').setup('plugins', {
-    install = {
-		missing = true,
-	},
-	checker = {
-		enabled = true,
-		notify = false,
-	},
-	change_detection = {
-		enabled = true,
-		notify = false,
-	},
-    performance = {
-        rtp = {
-            -- disable some rtp plugins
-            disabled_plugins = {
-                "gzip",
-                "tarPlugin",
-                "tohtml",
-                "tutor",
-                "zipPlugin",
-            },
-        },
+  install = {
+    missing = true,
+    colorscheme = { "catppuccin", "habamax" },
+  },
+  checker = {
+    enabled = true,
+    notify = false,
+  },
+  change_detection = {
+    enabled = true,
+    notify = false,
+  },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+        "netrwPlugin",
+      },
     },
+  },
 })
-
-

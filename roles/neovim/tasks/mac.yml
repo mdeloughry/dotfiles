@@ -1,0 +1,100 @@
+---
+# Clean install - remove all old neovim data
+- name: "Neovim | Remove old config"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/nvim"
+    state: absent
+
+- name: "Neovim | Remove old plugin data"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.local/share/nvim"
+    state: absent
+
+- name: "Neovim | Remove old state"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.local/state/nvim"
+    state: absent
+
+- name: "Neovim | Remove old cache"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.cache/nvim"
+    state: absent
+
+- name: "Neovim | Install"
+  ansible.builtin.homebrew:
+    name: neovim
+    state: latest
+
+- name: "Neovim | Core Dependencies"
+  ansible.builtin.homebrew:
+    name:
+      - ripgrep
+      - fd
+      - fzf
+      - lazygit
+      - sqlite
+      - lua-language-server
+    state: present
+
+- name: "Neovim | Language Support"
+  ansible.builtin.homebrew:
+    name:
+      - node
+      - php
+      - composer
+      - go
+    state: present
+
+- name: "Neovim | NPM Packages"
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+  loop:
+    - prettier
+    - typescript
+    - typescript-language-server
+    - "@tailwindcss/language-server"
+    - vscode-langservers-extracted
+  ignore_errors: true
+
+- name: "Neovim | Go Tools"
+  ansible.builtin.shell: |
+    go install golang.org/x/tools/gopls@latest
+    go install mvdan.cc/gofumpt@latest
+    go install golang.org/x/tools/cmd/goimports@latest
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/go/bin:{{ ansible_user_dir }}/go/bin"
+  ignore_errors: true
+
+- name: "Neovim | Create config directory"
+  ansible.builtin.file:
+    mode: "0755"
+    path: "{{ ansible_user_dir }}/.config/nvim"
+    state: directory
+
+- name: "Neovim | Create lua directories"
+  ansible.builtin.file:
+    mode: "0755"
+    path: "{{ ansible_user_dir }}/.config/nvim/lua/{{ item }}"
+    state: directory
+  loop:
+    - core
+    - plugins
+
+- name: "Neovim | Copy init.lua"
+  ansible.builtin.copy:
+    dest: "{{ ansible_user_dir }}/.config/nvim/init.lua"
+    src: "init.lua"
+    mode: "0644"
+
+- name: "Neovim | Copy core modules"
+  ansible.builtin.copy:
+    dest: "{{ ansible_user_dir }}/.config/nvim/lua/core/"
+    src: "lua/core/"
+    mode: "0644"
+
+- name: "Neovim | Copy plugin modules"
+  ansible.builtin.copy:
+    dest: "{{ ansible_user_dir }}/.config/nvim/lua/plugins/"
+    src: "lua/plugins/"
+    mode: "0644"

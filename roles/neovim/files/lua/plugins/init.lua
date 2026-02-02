@@ -1,32 +1,100 @@
+-- Base plugins that don't need configuration
 return {
-    "nvim-lua/popup.nvim",   -- An implementation of the Popup API from vim in Neovim
-    "nvim-lua/plenary.nvim", -- Useful lua functions used ny lots of plugins
-    'simrat39/symbols-outline.nvim',
-    "ThePrimeagen/harpoon",
-    { "windwp/nvim-ts-autotag", dependencies = "nvim-treesitter" },
-    "neovim/nvim-lspconfig",
-    ({ "mfussenegger/nvim-dap", dependencies = { "rcarriga/nvim-dap-ui" } }),
-    "leoluz/nvim-dap-go",
-    "sharkdp/fd",
-    {
-        'lewis6991/gitsigns.nvim',
-        config = function()
-            require('gitsigns').setup()
-        end
+  -- Core dependencies
+  { "nvim-lua/plenary.nvim", lazy = true },
+  { "nvim-lua/popup.nvim", lazy = true },
+  { "MunifTanjim/nui.nvim", lazy = true },
+
+  -- Icons
+  { "nvim-tree/nvim-web-devicons", lazy = true },
+
+  -- Tmux integration
+  {
+    "christoomey/vim-tmux-navigator",
+    lazy = false,
+    keys = {
+      { "<C-h>", "<cmd>TmuxNavigateLeft<cr>", desc = "Navigate Left" },
+      { "<C-j>", "<cmd>TmuxNavigateDown<cr>", desc = "Navigate Down" },
+      { "<C-k>", "<cmd>TmuxNavigateUp<cr>", desc = "Navigate Up" },
+      { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Navigate Right" },
     },
-    {
-        "christoomey/vim-tmux-navigator",
-        lazy = false,
+  },
+
+  -- Better UI for vim.ui.select and vim.ui.input
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+
+  -- Indent guides
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      indent = { char = "│" },
+      scope = { enabled = true },
+      exclude = {
+        filetypes = { "help", "dashboard", "neo-tree", "lazy", "mason" },
+      },
     },
-    {
-        "sbdchd/neoformat",
+  },
+
+  -- Surround
+  {
+    "kylechui/nvim-surround",
+    version = "*",
+    event = "VeryLazy",
+    opts = {},
+  },
+
+  -- Better escape
+  {
+    "max397574/better-escape.nvim",
+    event = "InsertEnter",
+    opts = {
+      timeout = 300,
     },
-    -- {
-    --     'akinsho/bufferline.nvim',
-    --     version = "*",
-    --     dependencies = 'nvim-tree/nvim-web-devicons',
-    --     config = true,
-    -- },
-    'crispgm/nvim-go',
-    'erikzaadi/vim-ansible-yaml',
+  },
+
+  -- Todo comments
+  {
+    "folke/todo-comments.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+
+  -- Trouble (diagnostics list)
+  {
+    "folke/trouble.nvim",
+    cmd = { "Trouble", "TroubleToggle" },
+    opts = {},
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics" },
+      { "<leader>xs", "<cmd>Trouble symbols toggle focus=false<cr>", desc = "Symbols (Trouble)" },
+    },
+  },
+
+  -- Flash (better navigation)
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+    },
+  },
+
+  -- Better buffer delete
+  {
+    "famiu/bufdelete.nvim",
+    cmd = { "Bdelete", "Bwipeout" },
+    keys = {
+      { "<leader>bd", "<cmd>Bdelete<cr>", desc = "Delete Buffer" },
+    },
+  },
 }
