@@ -32,10 +32,10 @@ Each role has:
 ### Running the Role
 ```bash
 # Normal run (preserves plugin data, cache, state)
-ansible-playbook playbook.yml --tags neovim
+dotfiles --tags neovim
 
 # Fresh install (wipes everything and reinstalls)
-ansible-playbook playbook.yml --tags neovim -e nvim_fresh_install=true
+dotfiles --tags neovim -e nvim_fresh_install=true
 ```
 
 ## Zsh
