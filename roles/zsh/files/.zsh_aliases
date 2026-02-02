@@ -31,6 +31,11 @@ fven() {
   fi
 }
 
+# neovim Aliases
+alias vim="nvim"
+alias v="nvim"
+alias nv="nvim"
+
 #cursor Aliases
 alias c="cursor"
 

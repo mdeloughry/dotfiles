@@ -49,7 +49,7 @@ return {
                 },
             },
             window = {
-                position = "float",
+                position = "right",
                 width = 35,
                 mappings = {
                     ["<Backspace>"] = {
