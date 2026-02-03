@@ -87,7 +87,7 @@ return {
           }
         end,
       })
-      vim.cmd.colorscheme("catppuccin")
+      -- vim.cmd.colorscheme("catppuccin")
     end,
   },
 
@@ -115,5 +115,18 @@ return {
     opts = {
       contrast = "hard",
     },
+  },
+
+  -- Tyrone Neon (local theme)
+  {
+    -- Local plugin living under: ~/.config/nvim/lua/plugins/tyrone-neon
+    dir = vim.fn.stdpath("config") .. "/lua/plugins/tyrone-neon",
+    name = "tyrone-neon",
+    lazy = true,
+    priority = 1000,
+    config = function()
+      require("plugins.tyrone-neon").setup()
+      vim.cmd.colorscheme("tyrone-neon")
+    end,
   },
 }

@@ -1,278 +1,367 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+# ~/.config/starship.toml
+# Tyrone Neon - Chartreuse (Fancy Edition)
 
 format = """
-[](red)\
+[░▒▓](#DAFF01)\
 $os\
 $username\
-[](bg:peach fg:red)\
+[](bg:#00D9FF fg:#DAFF01)\
 $directory\
-[](bg:yellow fg:peach)\
+[](fg:#00D9FF bg:#FF6B9D)\
 $git_branch\
 $git_status\
-[](fg:yellow bg:green)\
-$c\
+[](fg:#FF6B9D bg:#00FF87)\
+$nodejs\
+$python\
 $rust\
 $golang\
-$nodejs\
 $php\
 $java\
-$kotlin\
-$haskell\
-$python\
-[](fg:green bg:sapphire)\
-$conda\
-[](fg:sapphire bg:lavender)\
-$time\
-[ ](fg:lavender)\
+[](fg:#00FF87 bg:#C7A3FF)\
+$docker_context\
+$kubernetes\
+$aws\
+[](fg:#C7A3FF bg:#FFB347)\
+$package\
 $cmd_duration\
+[](fg:#FFB347)\
+$fill\
+$time\
+$battery\
 $line_break\
 $character"""
 
-palette = 'catppuccin_mocha'
+right_format = """$status$jobs"""
+
+continuation_prompt = "[▸▸](bold #737373) "
+
+palette = "tyrone_neon"
+
+[palettes.tyrone_neon]
+accent = "#DAFF01"
+bg_dark = "#000000"
+bg_light = "#0A0A0A"
+text = "#E5E5E5"
+muted = "#737373"
+red = "#FF4757"
+green = "#00FF87"
+yellow = "#FFFA65"
+blue = "#00D9FF"
+pink = "#FF6B9D"
+cyan = "#00FFCC"
+purple = "#C7A3FF"
+orange = "#FFB347"
+
+[fill]
+symbol = " "
 
 [os]
+style = "bg:#DAFF01 fg:#000000"
+format = "[ $symbol ]($style)"
 disabled = false
-style = "bg:red fg:crust"
 
 [os.symbols]
-Windows = ""
-Ubuntu = "󰕈"
-SUSE = ""
-Raspbian = "󰐿"
-Mint = "󰣭"
-Macos = "󰀵"
-Manjaro = ""
-Linux = "󰌽"
-Gentoo = "󰣨"
-Fedora = "󰣛"
-Alpine = ""
-Amazon = ""
-Android = ""
-Arch = "󰣇"
-Artix = "󰣇"
-CentOS = ""
-Debian = "󰣚"
-Redhat = "󱄛"
-RedHatEnterprise = "󱄛"
+Alpaquita = " "
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Windows = "󰍲 "
 
 [username]
+style_user = "bg:#DAFF01 fg:#000000 bold"
+style_root = "bg:#FF4757 fg:#000000 bold"
+format = "[ $user ]($style)"
 show_always = true
-style_user = "bg:red fg:crust"
-style_root = "bg:red fg:crust"
-format = '[ $user]($style)'
+
+[hostname]
+style = "bg:#DAFF01 fg:#000000 bold"
+format = "[@$hostname ]($style)"
+ssh_only = false
+ssh_symbol = "󰣀 "
 
 [directory]
-style = "bg:peach fg:crust"
-format = "[ $path ]($style)"
-truncation_length = 3
+style = "bg:#00D9FF fg:#000000 bold"
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+truncation_length = 4
+truncate_to_repo = true
+read_only = " 󰌾"
+read_only_style = "bg:#00D9FF fg:#FF4757"
+home_symbol = "󰋜 "
 truncation_symbol = "…/"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
-"Downloads" = " "
+"Downloads" = " "
 "Music" = "󰝚 "
-"Pictures" = " "
-"Developer" = "󰲋 "
+"Pictures" = " "
+"Videos" = " "
+"Developer" = " "
+"Projects" = " "
+".config" = " "
 
 [git_branch]
-symbol = ""
-style = "bg:yellow"
-format = '[[ $symbol $branch ](fg:crust bg:yellow)]($style)'
+style = "bg:#FF6B9D fg:#000000 bold"
+symbol = " "
+format = "[ $symbol$branch(:$remote_branch) ]($style)"
+truncation_length = 25
+truncation_symbol = "…"
 
 [git_status]
-style = "bg:yellow"
-format = '[[($all_status$ahead_behind )](fg:crust bg:yellow)]($style)'
+style = "bg:#FF6B9D fg:#000000"
+format = "[$all_status$ahead_behind]($style)"
+conflicted = " 󰞇${count}"
+ahead = " 󰜷${count}"
+behind = " 󰜮${count}"
+diverged = " 󰹺 󰜷${ahead_count} 󰜮${behind_count}"
+untracked = " 󰋗${count}"
+stashed = " 󰆓${count}"
+modified = " 󰝶${count}"
+staged = " 󰐖${count}"
+renamed = " 󰑕${count}"
+deleted = " 󰍴${count}"
+
+[git_state]
+style = "bg:#FF4757 fg:#000000 bold"
+format = "[ $state( $progress_current/$progress_total) ]($style)"
+rebase = "󰃻 REBASING"
+merge = " MERGING"
+revert = "󰕌 REVERTING"
+cherry_pick = " CHERRY"
+bisect = " BISECTING"
+am = " AM"
+am_or_rebase = " AM/REBASE"
+
+[git_metrics]
+disabled = true
+added_style = "bg:#FF6B9D fg:#00FF87"
+deleted_style = "bg:#FF6B9D fg:#FF4757"
+format = "([+$added]($added_style))([-$deleted]($deleted_style))"
 
 [nodejs]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+detect_files = ["package.json", ".node-version", ".nvmrc"]
 
-[c]
-symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+[bun]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
 
-[rust]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
-
-[golang]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
-
-[php]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
-
-[java]
-symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
-
-[kotlin]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
-
-[haskell]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+[deno]
+style = "bg:#00FF87 fg:#000000"
+symbol = "🦕 "
+format = "[ $symbol$version ]($style)"
 
 [python]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:green)]($style)'
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$pyenv_prefix$version(\\($virtualenv\\)) ]($style)"
+
+[rust]
+style = "bg:#00FF87 fg:#000000"
+symbol = "󱘗 "
+format = "[ $symbol$version ]($style)"
+
+[golang]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[php]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[java]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[lua]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[ruby]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[swift]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[kotlin]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
+
+[c]
+style = "bg:#00FF87 fg:#000000"
+symbol = " "
+format = "[ $symbol$version ]($style)"
 
 [docker_context]
-symbol = ""
-style = "bg:sapphire"
-format = '[[ $symbol( $context) ](fg:crust bg:sapphire)]($style)'
+style = "bg:#C7A3FF fg:#000000"
+symbol = " "
+format = "[ $symbol$context ]($style)"
+only_with_files = true
 
-[conda]
-symbol = "  "
-style = "fg:crust bg:sapphire"
-format = '[$symbol$environment ]($style)'
-ignore_base = false
-
-[time]
+[kubernetes]
+style = "bg:#C7A3FF fg:#000000"
+symbol = "󱃾 "
+format = "[ $symbol$context(\\($namespace\\)) ]($style)"
 disabled = false
-time_format = "%R"
-style = "bg:lavender"
-format = '[[  $time ](fg:crust bg:lavender)]($style)'
+detect_files = ["k8s", "kubernetes", "kubectl"]
 
-[line_break]
+[aws]
+style = "bg:#C7A3FF fg:#000000"
+symbol = " "
+format = "[ $symbol($profile)(\\($region\\)) ]($style)"
 disabled = true
 
-[character]
-disabled = false
-success_symbol = '[❯](bold fg:green)'
-error_symbol = '[❯](bold fg:red)'
-vimcmd_symbol = '[❮](bold fg:green)'
-vimcmd_replace_one_symbol = '[❮](bold fg:lavender)'
-vimcmd_replace_symbol = '[❮](bold fg:lavender)'
-vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+[terraform]
+style = "bg:#C7A3FF fg:#000000"
+symbol = "󱁢 "
+format = "[ $symbol$workspace ]($style)"
+disabled = true
+
+[package]
+style = "bg:#FFB347 fg:#000000"
+symbol = "󰏗 "
+format = "[ $symbol$version ]($style)"
+display_private = true
 
 [cmd_duration]
-show_milliseconds = true
-format = " in $duration "
-style = "bg:lavender"
-disabled = false
+style = "bg:#FFB347 fg:#000000"
+format = "[ 󱎫 $duration ]($style)"
+min_time = 1_000
+show_milliseconds = false
+min_time_to_notify = 30_000
 show_notifications = false
-min_time_to_notify = 45000
 
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
+[time]
+style = "bold #DAFF01"
+format = "[ 󰥔 $time ]($style)"
+disabled = false
+time_format = "%H:%M"
+utc_time_offset = "local"
 
-[palettes.catppuccin_frappe]
-rosewater = "#f2d5cf"
-flamingo = "#eebebe"
-pink = "#f4b8e4"
-mauve = "#ca9ee6"
-red = "#e78284"
-maroon = "#ea999c"
-peach = "#ef9f76"
-yellow = "#e5c890"
-green = "#a6d189"
-teal = "#81c8be"
-sky = "#99d1db"
-sapphire = "#85c1dc"
-blue = "#8caaee"
-lavender = "#babbf1"
-text = "#c6d0f5"
-subtext1 = "#b5bfe2"
-subtext0 = "#a5adce"
-overlay2 = "#949cbb"
-overlay1 = "#838ba7"
-overlay0 = "#737994"
-surface2 = "#626880"
-surface1 = "#51576d"
-surface0 = "#414559"
-base = "#303446"
-mantle = "#292c3c"
-crust = "#232634"
+[battery]
+disabled = false
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰁽 "
+empty_symbol = "󰂎 "
+format = "[$symbol$percentage]($style) "
 
-[palettes.catppuccin_latte]
-rosewater = "#dc8a78"
-flamingo = "#dd7878"
-pink = "#ea76cb"
-mauve = "#8839ef"
-red = "#d20f39"
-maroon = "#e64553"
-peach = "#fe640b"
-yellow = "#df8e1d"
-green = "#40a02b"
-teal = "#179299"
-sky = "#04a5e5"
-sapphire = "#209fb5"
-blue = "#1e66f5"
-lavender = "#7287fd"
-text = "#4c4f69"
-subtext1 = "#5c5f77"
-subtext0 = "#6c6f85"
-overlay2 = "#7c7f93"
-overlay1 = "#8c8fa1"
-overlay0 = "#9ca0b0"
-surface2 = "#acb0be"
-surface1 = "#bcc0cc"
-surface0 = "#ccd0da"
-base = "#eff1f5"
-mantle = "#e6e9ef"
-crust = "#dce0e8"
+[[battery.display]]
+threshold = 15
+style = "bold #FF4757"
+discharging_symbol = "󰁺 "
 
-[palettes.catppuccin_macchiato]
-rosewater = "#f4dbd6"
-flamingo = "#f0c6c6"
-pink = "#f5bde6"
-mauve = "#c6a0f6"
-red = "#ed8796"
-maroon = "#ee99a0"
-peach = "#f5a97f"
-yellow = "#eed49f"
-green = "#a6da95"
-teal = "#8bd5ca"
-sky = "#91d7e3"
-sapphire = "#7dc4e4"
-blue = "#8aadf4"
-lavender = "#b7bdf8"
-text = "#cad3f5"
-subtext1 = "#b8c0e0"
-subtext0 = "#a5adcb"
-overlay2 = "#939ab7"
-overlay1 = "#8087a2"
-overlay0 = "#6e738d"
-surface2 = "#5b6078"
-surface1 = "#494d64"
-surface0 = "#363a4f"
-base = "#24273a"
-mantle = "#1e2030"
-crust = "#181926"
+[[battery.display]]
+threshold = 30
+style = "bold #FFB347"
+discharging_symbol = "󰁻 "
+
+[[battery.display]]
+threshold = 50
+style = "bold #FFFA65"
+discharging_symbol = "󰁼 "
+
+[[battery.display]]
+threshold = 100
+style = "bold #00FF87"
+
+[memory_usage]
+style = "bold #C7A3FF"
+symbol = "󰍛 "
+format = "$symbol[${ram}( | ${swap})]($style) "
+disabled = true
+threshold = 75
+
+[jobs]
+style = "bold #C7A3FF"
+symbol = "󰜎 "
+format = "[$symbol$number]($style) "
+threshold = 1
+number_threshold = 2
+
+[status]
+style = "bold #FF4757"
+symbol = "󰅙 "
+success_symbol = ""
+format = "[$symbol$status]($style) "
+disabled = false
+map_symbol = true
+recognize_signal_code = true
+
+[sudo]
+style = "bold #FF4757"
+symbol = "󰯄 "
+format = "[$symbol]($style)"
+disabled = false
+
+[character]
+success_symbol = "[╰─❯](bold #DAFF01)[❯](#00D9FF)[❯](#FF6B9D)"
+error_symbol = "[╰─❯](bold #FF4757)[❯](#FF6B9D)[❯](#FFB347)"
+vimcmd_symbol = "[╰─❮](bold #00FF87)[❮](#00D9FF)[❮](#C7A3FF)"
+vimcmd_replace_one_symbol = "[╰─❮](bold #FFFA65)[❮](#FFB347)[❮](#FF6B9D)"
+vimcmd_replace_symbol = "[╰─❮](bold #FFFA65)[❮](#FFB347)[❮](#FF6B9D)"
+vimcmd_visual_symbol = "[╰─❮](bold #C7A3FF)[❮](#FF6B9D)[❮](#00D9FF)"
+
+[line_break]
+disabled = false
+
+[shell]
+disabled = true
+bash_indicator = "󱆃 "
+zsh_indicator = " "
+fish_indicator = "󰈺 "
+powershell_indicator = "󰨊 "
+style = "bold #737373"
+format = "[$indicator]($style) "
+
+[localip]
+disabled = true
+style = "bold #00D9FF"
+format = "[ 󰩟 $localipv4 ]($style)"
+ssh_only = true

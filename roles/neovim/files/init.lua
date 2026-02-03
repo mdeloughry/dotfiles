@@ -23,7 +23,7 @@ require('core')
 require('lazy').setup('plugins', {
   install = {
     missing = true,
-    colorscheme = { "catppuccin", "habamax" },
+    colorscheme = { "catppuccin", "habamax", "tyrone-neon" },
   },
   checker = {
     enabled = true,
