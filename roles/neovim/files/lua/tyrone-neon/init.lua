@@ -66,12 +66,16 @@ function M.setup()
 
   -- Helper function
   local function hi(group, opts)
-    local cmd = "highlight " .. group
-    if opts.fg then cmd = cmd .. " guifg=" .. opts.fg end
-    if opts.bg then cmd = cmd .. " guibg=" .. opts.bg end
-    if opts.sp then cmd = cmd .. " guisp=" .. opts.sp end
-    if opts.style then cmd = cmd .. " gui=" .. opts.style else cmd = cmd .. " gui=NONE" end
-    vim.cmd(cmd)
+    local hl = {}
+    if opts.fg then hl.fg = opts.fg end
+    if opts.bg then hl.bg = opts.bg end
+    if opts.sp then hl.sp = opts.sp end
+    if opts.style then
+      for s in opts.style:gmatch("[^,]+") do
+        hl[s] = true
+      end
+    end
+    vim.api.nvim_set_hl(0, group, hl)
   end
 
   -- ========================================
@@ -146,10 +150,10 @@ function M.setup()
   -- ========================================
   -- Diff
   -- ========================================
-  hi("DiffAdd", { fg = c.git_add, bg = "#00FF8720" })
-  hi("DiffChange", { fg = c.git_change, bg = "#00D9FF20" })
-  hi("DiffDelete", { fg = c.git_delete, bg = "#FF475720" })
-  hi("DiffText", { fg = c.fg, bg = "#00D9FF40" })
+  hi("DiffAdd", { fg = c.git_add, bg = "#002011" })
+  hi("DiffChange", { fg = c.git_change, bg = "#001B20" })
+  hi("DiffDelete", { fg = c.git_delete, bg = "#20090B" })
+  hi("DiffText", { fg = c.fg, bg = "#003640" })
   hi("diffAdded", { fg = c.git_add })
   hi("diffRemoved", { fg = c.git_delete })
   hi("diffChanged", { fg = c.git_change })
@@ -323,10 +327,10 @@ function M.setup()
   hi("DiagnosticInfo", { fg = c.info })
   hi("DiagnosticHint", { fg = c.hint })
   hi("DiagnosticOk", { fg = c.green })
-  hi("DiagnosticVirtualTextError", { fg = c.error, bg = "#FF475715" })
-  hi("DiagnosticVirtualTextWarn", { fg = c.warning, bg = "#FFFA6515" })
-  hi("DiagnosticVirtualTextInfo", { fg = c.info, bg = "#00D9FF15" })
-  hi("DiagnosticVirtualTextHint", { fg = c.hint, bg = "#00FFCC15" })
+  hi("DiagnosticVirtualTextError", { fg = c.error, bg = "#150607" })
+  hi("DiagnosticVirtualTextWarn", { fg = c.warning, bg = "#151508" })
+  hi("DiagnosticVirtualTextInfo", { fg = c.info, bg = "#001215" })
+  hi("DiagnosticVirtualTextHint", { fg = c.hint, bg = "#001511" })
   hi("DiagnosticUnderlineError", { sp = c.error, style = "undercurl" })
   hi("DiagnosticUnderlineWarn", { sp = c.warning, style = "undercurl" })
   hi("DiagnosticUnderlineInfo", { sp = c.info, style = "undercurl" })
@@ -432,9 +436,9 @@ function M.setup()
   hi("GitSignsAddNr", { fg = c.git_add })
   hi("GitSignsChangeNr", { fg = c.git_change })
   hi("GitSignsDeleteNr", { fg = c.git_delete })
-  hi("GitSignsAddLn", { bg = "#00FF8720" })
-  hi("GitSignsChangeLn", { bg = "#00D9FF20" })
-  hi("GitSignsDeleteLn", { bg = "#FF475720" })
+  hi("GitSignsAddLn", { bg = "#002011" })
+  hi("GitSignsChangeLn", { bg = "#001B20" })
+  hi("GitSignsDeleteLn", { bg = "#20090B" })
   hi("GitSignsCurrentLineBlame", { fg = c.fg_muted, style = "italic" })
 
   -- ========================================

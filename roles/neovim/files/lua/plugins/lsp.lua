@@ -69,23 +69,6 @@ return {
 
       local capabilities = cmp_nvim_lsp.default_capabilities()
 
-      -- Setup mason-lspconfig
-      mason_lspconfig.setup({
-        ensure_installed = {
-          "intelephense",    -- PHP/Laravel
-          "ts_ls",           -- TypeScript
-          "tailwindcss",     -- Tailwind
-          "gopls",           -- Go
-          "lua_ls",          -- Lua
-          "html",            -- HTML
-          "cssls",           -- CSS
-          "jsonls",          -- JSON
-          "yamlls",          -- YAML
-          "bashls",          -- Bash
-        },
-        automatic_installation = true,
-      })
-
       -- Server-specific settings
       local server_settings = {
         lua_ls = {
@@ -122,14 +105,29 @@ return {
         },
       }
 
-      -- Setup each installed server
-      mason_lspconfig.setup_handlers({
-        function(server_name)
-          local server_opts = server_settings[server_name] or {}
-          server_opts.on_attach = on_attach
-          server_opts.capabilities = capabilities
-          lspconfig[server_name].setup(server_opts)
-        end,
+      -- Setup mason-lspconfig with handlers
+      mason_lspconfig.setup({
+        ensure_installed = {
+          "intelephense",    -- PHP/Laravel
+          "ts_ls",           -- TypeScript
+          "tailwindcss",     -- Tailwind
+          "gopls",           -- Go
+          "lua_ls",          -- Lua
+          "html",            -- HTML
+          "cssls",           -- CSS
+          "jsonls",          -- JSON
+          "yamlls",          -- YAML
+          "bashls",          -- Bash
+        },
+        automatic_installation = true,
+        handlers = {
+          function(server_name)
+            local server_opts = server_settings[server_name] or {}
+            server_opts.on_attach = on_attach
+            server_opts.capabilities = capabilities
+            lspconfig[server_name].setup(server_opts)
+          end,
+        },
       })
     end,
   },

@@ -84,6 +84,8 @@
   loop:
     - core
     - plugins
+    - tyrone-neon
+    - tyrone-neon/colors
 
 - name: "Neovim | Copy init.lua"
   ansible.builtin.copy:
@@ -101,4 +103,10 @@
   ansible.builtin.copy:
     dest: "{{ ansible_user_dir }}/.config/nvim/lua/plugins/"
     src: "lua/plugins/"
+    mode: "0644"
+
+- name: "Neovim | Copy tyrone-neon colorscheme"
+  ansible.builtin.copy:
+    dest: "{{ ansible_user_dir }}/.config/nvim/lua/tyrone-neon/"
+    src: "lua/tyrone-neon/"
     mode: "0644"

@@ -120,12 +120,11 @@ return {
   -- Tyrone Neon (local theme)
   {
     -- Local plugin living under: ~/.config/nvim/lua/plugins/tyrone-neon
-    dir = vim.fn.stdpath("config") .. "/lua/plugins/tyrone-neon",
+    dir = vim.fn.stdpath("config") .. "/lua/tyrone-neon",
     name = "tyrone-neon",
-    lazy = true,
+    lazy = false,
     priority = 1000,
     config = function()
-      require("plugins.tyrone-neon").setup()
       vim.cmd.colorscheme("tyrone-neon")
     end,
   },
