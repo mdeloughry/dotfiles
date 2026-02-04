@@ -539,7 +539,6 @@ function M.setup()
   hi("CmpItemKindUnit", { fg = c.yellow })
   hi("CmpItemKindValue", { fg = c.yellow })
   hi("CmpItemKindVariable", { fg = c.fg })
-  hi("CmpItemKindCopilot", { fg = c.green })
 
   -- ========================================
   -- Noice

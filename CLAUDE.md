@@ -26,7 +26,6 @@ Each role has:
 
 ### Key Plugins
 - `claudecode.nvim` - Claude Code integration (uses CLI auth, no API key needed)
-- `copilot.lua` - GitHub Copilot
 - LSP via `nvim-lspconfig` (not lsp-zero)
 
 ### Running the Role

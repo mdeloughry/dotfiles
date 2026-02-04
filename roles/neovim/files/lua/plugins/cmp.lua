@@ -62,7 +62,6 @@ return {
         end, { "i", "s" }),
       }),
       sources = cmp.config.sources({
-        { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "path" },
@@ -74,7 +73,6 @@ return {
           mode = "symbol_text",
           maxwidth = 50,
           menu = {
-            copilot = "[AI]",
             nvim_lsp = "[LSP]",
             luasnip = "[Snip]",
             buffer = "[Buf]",
