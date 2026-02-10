@@ -1,0 +1,46 @@
+# Font
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+
+# Window
+window-padding-x = 8
+window-padding-y = 8
+window-decoration = true
+
+# Scrollback
+scrollback-limit = 100000
+
+# Clipboard
+copy-on-select = clipboard
+
+# Tyrone Neon Theme
+background = 000000
+foreground = e5e5e5
+
+# Cursor - Chartreuse accent
+cursor-color = daff01
+cursor-text = 000000
+
+# Selection
+selection-background = 171717
+selection-foreground = e5e5e5
+
+# Normal colors
+palette = 0=#000000
+palette = 1=#ff4757
+palette = 2=#00ff87
+palette = 3=#fffa65
+palette = 4=#00d9ff
+palette = 5=#ff6b9d
+palette = 6=#00ffcc
+palette = 7=#e5e5e5
+
+# Bright colors
+palette = 8=#7d8590
+palette = 9=#ff6b6b
+palette = 10=#5effa3
+palette = 11=#ffff80
+palette = 12=#40e0ff
+palette = 13=#ff8fc7
+palette = 14=#80ffe6
+palette = 15=#ffffff
