@@ -16,18 +16,19 @@ export SSH_AUTH_SOCK=~/.1password/agent.sock
 # NVM lazy-loading for faster shell startup
 export NVM_DIR="$HOME/.nvm"
 
-# Lazy-load NVM - only loads when nvm/node/npm/npx/yarn is called
+# Define _nvm_lazy_load before the wrapper functions
 _nvm_lazy_load() {
-  unset -f nvm node npm npx yarn 2>/dev/null
+  unset -f nvm node npm npx yarn _nvm_lazy_load 2>/dev/null
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 }
 
-nvm() { _nvm_lazy_load; nvm "$@"; }
-node() { _nvm_lazy_load; node "$@"; }
-npm() { _nvm_lazy_load; npm "$@"; }
-npx() { _nvm_lazy_load; npx "$@"; }
-yarn() { _nvm_lazy_load; yarn "$@"; }
+# Wrapper functions with fallback to direct binary if lazy load fails
+nvm() { _nvm_lazy_load 2>/dev/null && nvm "$@"; }
+node() { _nvm_lazy_load 2>/dev/null && node "$@" || command node "$@"; }
+npm() { _nvm_lazy_load 2>/dev/null && npm "$@" || command npm "$@"; }
+npx() { _nvm_lazy_load 2>/dev/null && npx "$@" || command npx "$@"; }
+yarn() { _nvm_lazy_load 2>/dev/null && yarn "$@" || command yarn "$@"; }
 
 # Auto-switch node version when entering directories with .nvmrc
 autoload -U add-zsh-hook

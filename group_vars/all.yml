@@ -3,6 +3,7 @@ default_roles:
   - zsh
   - 1password
   - alacritty
+  - ghostty
   - asciiquarium
   - npm
   - aws

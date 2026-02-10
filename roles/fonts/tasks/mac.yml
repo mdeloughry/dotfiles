@@ -5,9 +5,18 @@
     repo: https://github.com/githubnext/monaspace.git
     dest: "{{ ansible_env.HOME }}/monaspace-fonts"
 
-- name: Changing perm of "/tmp/install.sh", adding "u+x"
-  file: dest={{ ansible_env.HOME }}/monaspace-fonts/util/install_macos.sh mode=u+x
+- name: "Fonts | Find all MonaSpace font files"
+  ansible.builtin.find:
+    paths: "{{ ansible_env.HOME }}/monaspace-fonts/fonts"
+    patterns: "*.ttf,*.otf"
+    recurse: true
+  register: monaspace_font_files
 
-- name: "Fonts | Install MonaSpace Fonts"
-  ansible.builtin.shell:
-    cmd: "{{ ansible_env.HOME }}/monaspace-fonts/util/install_macos.sh"
+- name: "Fonts | Copy MonaSpace fonts to Library"
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: "{{ ansible_env.HOME }}/Library/Fonts/"
+    mode: "0644"
+  loop: "{{ monaspace_font_files.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
