@@ -30,6 +30,10 @@ cursor-text = 000000
 selection-background = 2a3a00
 selection-foreground = e5e5e5
 
+# Splits / Panes
+split-divider-color = 4a5a00
+unfocused-split-opacity = 0.85
+
 # Normal colors
 palette = 0=#000000
 palette = 1=#ff4757
