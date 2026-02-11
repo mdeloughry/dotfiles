@@ -27,7 +27,7 @@ cursor-color = daff01
 cursor-text = 000000
 
 # Selection
-selection-background = 3a3a3a
+selection-background = 2a3a00
 selection-foreground = e5e5e5
 
 # Normal colors
