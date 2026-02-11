@@ -21,9 +21,9 @@ foreground = e5e5e5
 cursor-color = daff01
 cursor-text = 000000
 
-# Selection
-selection-background = 171717
-selection-foreground = e5e5e5
+# Selection - darker chartreuse tint for visibility
+selection-background = 2a3a00
+selection-foreground = ffffff
 
 # Normal colors
 palette = 0=#000000
