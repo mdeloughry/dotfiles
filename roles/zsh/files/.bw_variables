@@ -1,0 +1,121 @@
+# Bitwarden-backed environment variables.
+# Auto-run on interactive shell start. BW_SESSION cached in macOS Keychain
+# so master password is only requested once per device (until `bw lock`
+# or `bw-forget` is called).
+# Requires: bw CLI, jq. macOS: `security`. Linux: falls back to ~/.cache/bw/session (mode 600).
+
+_BW_KEYCHAIN_SERVICE="bw-cli-session"
+_BW_KEYCHAIN_ACCOUNT="${USER}"
+_BW_LINUX_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/bw/session"
+
+# Self-hosted Bitwarden / Vaultwarden URL. Override per-host if needed.
+: "${BW_SERVER:=https://vault.pd-lab.work}"
+
+_bw_ensure_server() {
+  [ -n "$BW_SERVER" ] || return 0
+  local current
+  current=$(bw config server 2>/dev/null)
+  [ "$current" = "$BW_SERVER" ] && return 0
+  # Cannot change server while authenticated.
+  bw logout >/dev/null 2>&1
+  _bw_session_clear
+  bw config server "$BW_SERVER" >/dev/null 2>&1
+}
+
+_bw_session_get() {
+  if [ "$(uname)" = "Darwin" ]; then
+    security find-generic-password -s "$_BW_KEYCHAIN_SERVICE" -a "$_BW_KEYCHAIN_ACCOUNT" -w 2>/dev/null
+  else
+    [ -r "$_BW_LINUX_CACHE" ] && cat "$_BW_LINUX_CACHE"
+  fi
+}
+
+_bw_session_save() {
+  local session="$1"
+  if [ "$(uname)" = "Darwin" ]; then
+    security add-generic-password -U \
+      -s "$_BW_KEYCHAIN_SERVICE" \
+      -a "$_BW_KEYCHAIN_ACCOUNT" \
+      -w "$session" 2>/dev/null
+  else
+    mkdir -p "$(dirname "$_BW_LINUX_CACHE")"
+    umask 077
+    printf '%s' "$session" > "$_BW_LINUX_CACHE"
+  fi
+}
+
+_bw_session_clear() {
+  if [ "$(uname)" = "Darwin" ]; then
+    security delete-generic-password -s "$_BW_KEYCHAIN_SERVICE" -a "$_BW_KEYCHAIN_ACCOUNT" 2>/dev/null
+  else
+    rm -f "$_BW_LINUX_CACHE"
+  fi
+  unset BW_SESSION
+}
+
+_bw_ensure_unlocked() {
+  command -v bw >/dev/null 2>&1 || { echo "bw CLI not installed" >&2; return 1; }
+  command -v jq >/dev/null 2>&1 || { echo "jq not installed" >&2; return 1; }
+
+  _bw_ensure_server
+
+  # Try cached session first.
+  if [ -z "$BW_SESSION" ]; then
+    local cached
+    cached=$(_bw_session_get)
+    [ -n "$cached" ] && export BW_SESSION="$cached"
+  fi
+
+  local bw_state
+  bw_state=$(bw status 2>/dev/null | jq -r '.status' 2>/dev/null)
+
+  case "$bw_state" in
+    unlocked) return 0 ;;
+    unauthenticated)
+      [ -t 0 ] || return 1   # no TTY → silently skip
+      echo "bw: logging in..." >&2
+      BW_SESSION="$(bw login --raw)" || return 1
+      export BW_SESSION
+      _bw_session_save "$BW_SESSION"
+      ;;
+    locked|*)
+      [ -t 0 ] || return 1
+      BW_SESSION="$(bw unlock --raw)" || { _bw_session_clear; return 1; }
+      export BW_SESSION
+      _bw_session_save "$BW_SESSION"
+      ;;
+  esac
+}
+
+# Fetch hidden field from a Bitwarden item.
+_bw_field() {
+  local item="$1" field="$2"
+  bw get item "$item" 2>/dev/null \
+    | jq -r --arg f "$field" '.fields[] | select(.name==$f) | .value'
+}
+
+bw-load() {
+  _bw_ensure_unlocked || return 1
+  bw sync >/dev/null 2>&1
+
+  local token
+  token=$(_bw_field "BITBUCKET API TOKEN" "API TOKEN")
+  if [ -z "$token" ] || [ "$token" = "null" ]; then
+    echo "bw-load: BITBUCKET_API_TOKEN not found" >&2
+    return 1
+  fi
+  export BITBUCKET_API_TOKEN="$token"
+}
+
+# Forget cached session (forces master-password prompt next time).
+bw-forget() {
+  bw lock >/dev/null 2>&1
+  _bw_session_clear
+  echo "bw: session cleared"
+}
+
+# Auto-run on interactive shell start.
+# Skip if non-interactive, or token already populated.
+if [[ $- == *i* ]] && [ -z "$BITBUCKET_API_TOKEN" ]; then
+  bw-load >/dev/null 2>&1 &!
+fi

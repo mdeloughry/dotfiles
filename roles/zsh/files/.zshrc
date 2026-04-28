@@ -59,7 +59,7 @@ load-nvmrc() {
 
 add-zsh-hook chpwd load-nvmrc
 
-export PATH="$PATH:$HOME/.local/bin:$HOME/.composer/vendor/bin"
+export PATH="$PATH:$HOME/.local/bin:$HOME/.composer/vendor/bin:$HOME/go/bin"
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="$HOME/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
@@ -99,3 +99,4 @@ fi
 
 
 source $HOME/.zsh_aliases
+[ -f "$HOME/.bw_variables" ] && source "$HOME/.bw_variables"

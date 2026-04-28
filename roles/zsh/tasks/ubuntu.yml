@@ -57,6 +57,12 @@
     dest: "{{ ansible_user_dir }}/.zshrc"
     mode: "0644"
 
+- name: "Zsh | Copy .bw_variables"
+  ansible.builtin.copy:
+    src: ".bw_variables"
+    dest: "{{ ansible_user_dir }}/.bw_variables"
+    mode: "0600"
+
 
 - name: "zsh | Copy Private Files openai.apikey"
   ansible.builtin.lineinfile:
