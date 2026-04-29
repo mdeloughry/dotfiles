@@ -98,13 +98,25 @@ bw-load() {
   _bw_ensure_unlocked || return 1
   bw sync >/dev/null 2>&1
 
-  local token
-  token=$(_bw_field "BITBUCKET API TOKEN" "API TOKEN")
+  local item="BITBUCKET API TOKEN" raw token username
+  raw=$(bw get item "$item" 2>/dev/null) || {
+    echo "bw-load: item '$item' not found" >&2
+    return 1
+  }
+
+  token=$(echo "$raw" | jq -r '.fields[] | select(.name=="API TOKEN") | .value')
+  username=$(echo "$raw" | jq -r '.login.username // (.fields[]? | select(.name=="Username") | .value) // empty')
+
   if [ -z "$token" ] || [ "$token" = "null" ]; then
     echo "bw-load: BITBUCKET_API_TOKEN not found" >&2
     return 1
   fi
+  if [ -z "$username" ] || [ "$username" = "null" ]; then
+    echo "bw-load: BITBUCKET_API_USERNAME not found" >&2
+    return 1
+  fi
   export BITBUCKET_API_TOKEN="$token"
+  export BITBUCKET_API_USERNAME="$username"
 }
 
 # Forget cached session (forces master-password prompt next time).
