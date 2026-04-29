@@ -104,8 +104,11 @@ bw-load() {
     return 1
   }
 
-  token=$(echo "$raw" | jq -r '.fields[] | select(.name=="API TOKEN") | .value')
-  username=$(echo "$raw" | jq -r '.login.username // (.fields[]? | select(.name=="Username") | .value) // empty')
+  token=$(echo "$raw" | jq -r '.fields[]? | select(.name=="API TOKEN") | .value')
+  username=$(echo "$raw" | jq -r '.login.username // empty')
+  if [ -z "$username" ]; then
+    username=$(echo "$raw" | jq -r '.fields[]? | select(.name=="Username") | .value')
+  fi
 
   if [ -z "$token" ] || [ "$token" = "null" ]; then
     echo "bw-load: BITBUCKET_API_TOKEN not found" >&2
